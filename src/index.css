@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+span[role="alert"] {
+    @apply text-red-500 text-xs;
+}

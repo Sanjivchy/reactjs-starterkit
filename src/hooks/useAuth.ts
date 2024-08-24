@@ -40,9 +40,10 @@ const useAuth = () => {
     try {
       const response: any = await AuthService.login(credentials);
       dispatch(loginSuccess(response.data));
+      notify('Login successful.', 'success');
     } catch (e: any) {
-      console.log(e);
       dispatch(loginFailure(e));
+      console.error(e);
       notify('Something went wrong.', 'error');
     }
   };

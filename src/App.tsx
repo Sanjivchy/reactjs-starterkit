@@ -1,5 +1,5 @@
 import './App.css';
-import Login from './pages/Login';
+import Login from './pages/auth/login/Login';
 import Users from './pages/Users';
 import Products from './pages/Products';
 import PrivateRoutes from './provider/PrivateRoute';
