@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { clearToken, getToken, setToken } from '../../utils/helpers/token.utils'
-
+import { RolesType } from '../../types/auth';
 interface UserTypes {
     name: string;
     email: string;
     profile: string;
+    role: RolesType;
 }
 interface AuthTypes {
   token: string;

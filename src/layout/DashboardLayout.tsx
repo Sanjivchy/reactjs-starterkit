@@ -1,16 +1,16 @@
 // src/layouts/MainLayout.tsx
 import React from 'react';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Outlet } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
 
 const MainLayout: React.FC = () => {
   return (
-    <div>
-      <Navbar />
-      <main>
+    <div className='flex '>
+      <Sidebar />
+      <section className="w-full">
         <Outlet /> {/* This will render the child route */}
-      </main>
+      </section>
       <Footer />
     </div>
   );

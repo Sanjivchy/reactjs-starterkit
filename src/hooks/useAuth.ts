@@ -43,7 +43,6 @@ const useAuth = () => {
       notify('Login successful.', 'success');
     } catch (e: any) {
       dispatch(loginFailure(e));
-      console.error(e);
       notify('Something went wrong.', 'error');
     }
   };
