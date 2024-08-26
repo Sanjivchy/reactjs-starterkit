@@ -30,9 +30,19 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from './store'; // Update with your actual store file path
 import useAuth from './hooks/useAuth';
 import Spinner from './components/ui/loader';
+
+
+import withAuthGuard from './hoc/auth-guard'; // Update with your actual path
+
+// Wrap private components with the HOC
+const UsersWithAuth = withAuthGuard(Users);
+const ProductsWithAuth = withAuthGuard(Products);
+const DashboardWithAuth = withAuthGuard(Dashboard);
+
+
 function App() {
   const dispatch = useDispatch<AppDispatch>();
-  const { token, authenticating, user } = useAuth();
+  const { token, authenticating} = useAuth();
   useEffect(() => {
     if (token) {
       dispatch(fetchUserProfile());
@@ -43,18 +53,12 @@ function App() {
     return <Spinner />; // Display loading indicator here
   }
 
-  if (!user) {
-    return <div>No user profile available.</div>;
-  }
   return (
     <> 
       <Router>
         <Routes>
-          {/* Apply MainLayout to all routes */}
           <Route element={<MainLayout />}>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            
+            <Route path="/" element={<Home />} />            
             <Route
               path="/login"
               element={
@@ -63,7 +67,6 @@ function App() {
                 </RestrictedRoute>
               }
             />
-
             <Route
               path="/register"
               element={
@@ -75,9 +78,9 @@ function App() {
             {/* Private Routes with DashboardLayout */}
             <Route element={<PrivateRoutes />}>
               <Route element={<DashboardLayout />}>
-                <Route path="/users" element={<Users />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/users" element={<UsersWithAuth />} />
+                <Route path="/products" element={<ProductsWithAuth />} />
+                <Route path="/dashboard" element={<DashboardWithAuth />} />
               </Route>
             </Route>
             <Route path="*" element={<NotFound />} />

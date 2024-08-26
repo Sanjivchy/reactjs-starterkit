@@ -4,7 +4,6 @@ import useAuth from '../../../hooks/useAuth';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignInSchema, SignInSchemaType } from '../../../schema/login.schema';
-import { useEffect } from 'react';
 
 const Login = () => {
   const { login } = useAuth();
@@ -12,14 +11,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm<SignInSchemaType>({ resolver: zodResolver(SignInSchema) });
-
-  useEffect(() => {
-    setValue('username', 'emilys');
-    setValue('password', 'emilyspass');
-  }, [setValue])
-
 
   const onSubmit: SubmitHandler<SignInSchemaType> = async(data) => {
     await login(data);

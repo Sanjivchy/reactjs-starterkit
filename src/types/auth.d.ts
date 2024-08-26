@@ -9,4 +9,4 @@ export interface loginType {
     confirm_password: string;
   }
   
-  export type RolesType = 'admin' | 'developer' | 'manager';
+  export type RolesType = 'admin' | 'moderator' | 'user';
