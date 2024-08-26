@@ -6,7 +6,7 @@ type HttpTypes = {
 };
 
 const http = (config?: HttpTypes) => {
-  const baseURL = "http://localhost:5000/api/v1";
+  const baseURL = "https://dummyjson.com";
   /*
    * axios config
    * */
@@ -17,6 +17,8 @@ const http = (config?: HttpTypes) => {
       ...config?.additionalHeader,
     },
   };
+
+  
 
   const instance = axios.create(axiosConfig);
 
