@@ -20,6 +20,7 @@ const http = (config?: HttpTypes) => {
     },
   };
 
+  
   const instance = axios.create(axiosConfig);
 
   /*
