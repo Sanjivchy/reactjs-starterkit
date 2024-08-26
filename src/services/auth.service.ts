@@ -6,7 +6,7 @@ class AuthService {
    * FETCH PROFILE
    * */
   static async fetchProfile() {
-    const response = await http().get('api/profile');
+    const response = await http().get('auth/me');
     return response.data;
   }
 

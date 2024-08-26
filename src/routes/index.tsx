@@ -1,5 +1,5 @@
 import { BrowserRouter as Routes, Route} from 'react-router-dom'
-import Login from '../pages/auth/login/Login';
+import Login from '../pages/auth/login';
 import Users from '../pages/users/Users';
 import Products from '../pages/products/Products';
 import PrivateRoutes from '../provider/PrivateRoute';

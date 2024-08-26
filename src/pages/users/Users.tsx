@@ -1,11 +1,14 @@
+import useAuth from '../../hooks/useAuth';
 
-const Users = () => {
+const Dashboard = () => {
+  const { user, authenticated } = useAuth();
   return (
-    <h1 className="text-3xl flex items-center justify-center h-screen font-bold underline">
-      Hello users
-    </h1>
-
+    <div className='text-center p-20'>
+      <h3 className='text-3xl font-bold'>
+       Hello Users 👋👋👋, i am {user?.firstName}  {user?.lastName}, {authenticated ? 'yes':'No'}
+      </h3>
+    </div>
   )
 }
 
-export default Users
+export default Dashboard

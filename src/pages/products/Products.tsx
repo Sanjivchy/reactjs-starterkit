@@ -1,9 +1,14 @@
-const Products = () => {
+import useAuth from '../../hooks/useAuth';
+
+const Dashboard = () => {
+  const { user, authenticated } = useAuth();
   return (
-    <div  className="text-3xl flex items-center justify-center h-screen font-bold underline">
-      Hello products
+    <div className='text-center p-20'>
+      <h3 className='text-3xl font-bold'>
+       Hello Product 👋👋👋, i am {user?.firstName}  {user?.lastName}, {authenticated ? 'yes':'No'}
+      </h3>
     </div>
   )
 }
 
-export default Products
+export default Dashboard

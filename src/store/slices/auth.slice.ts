@@ -1,12 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { clearToken, getToken, setToken } from '../../utils/helpers/token.utils'
 import { RolesType } from '../../types/auth';
+import AuthService from '../../services/auth.service';
+
 interface UserTypes {
-    name: string;
+    id: number;
+    firstName: string;
+    lastName: string;
     email: string;
-    profile: string;
     role: RolesType;
 }
+
 interface AuthTypes {
   token: string;
   authenticated: boolean;
@@ -22,6 +26,24 @@ const initialState: AuthTypes = {
   signing: false,
   user: undefined,
 };
+// Define the type for extra arguments
+type ThunkExtraArgs = {
+  AuthService: typeof AuthService;
+};
+
+export const fetchUserProfile = createAsyncThunk<UserTypes, void, { extra: ThunkExtraArgs }>(
+  'auth/fetchUserProfile',
+  async (_, { rejectWithValue, extra }) => {
+    try {
+      const { AuthService } = extra; // TypeScript now knows AuthService exists
+      const response = await AuthService.fetchProfile();
+      return response;
+    } catch (error) {
+      const err = error as Error;
+      return rejectWithValue(err.message);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -33,10 +55,8 @@ const authSlice = createSlice({
 
     loginSuccess(state, action) {
       const { token } = action.payload;
-
       state.authenticated = true;
       state.authenticating = false;
-
       state.token = token;
       setToken(token);
     },
@@ -56,7 +76,7 @@ const authSlice = createSlice({
     },
 
     setUser(state, action) {
-      state.user = action.payload.profile;
+      state.user = action.payload;
       state.authenticated = true;
     },
 
@@ -66,6 +86,25 @@ const authSlice = createSlice({
       state.authenticated = false;
     },
   },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUserProfile.pending, (state) => {
+        state.authenticating = true;
+        console.log("pending")
+      })
+      .addCase(fetchUserProfile.fulfilled, (state, action) => {
+        state.authenticating = false;
+        state.authenticated = true;
+        state.user = action.payload;
+        console.log("fulfilled")
+      })
+      .addCase(fetchUserProfile.rejected, (state) => {
+        state.authenticating = false;
+        console.log("rejected")
+      });
+  },
+  
 });
 
 export const {
@@ -77,4 +116,5 @@ export const {
   signupSuccess,
   setUser,
 } = authSlice.actions;
+
 export default authSlice;

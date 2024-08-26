@@ -40,6 +40,10 @@ const useAuth = () => {
     try {
       const response: any = await AuthService.login(credentials);
       dispatch(loginSuccess(response.data));
+
+      // FETCH PROFILE
+      await fetchProfile();
+       
       notify('Login successful.', 'success');
     } catch (e: any) {
       dispatch(loginFailure(e));
@@ -52,10 +56,11 @@ const useAuth = () => {
    * */
   const logout = async () => {
     try {
-      const response: any = await AuthService.logout();
-      if (response.data.ok) {
-        dispatch(authSlice.actions.logout());
-      }
+      // const response: any = await AuthService.logout();
+      // if (response.data.ok) {
+      //   dispatch(authSlice.actions.logout());
+      // }
+      dispatch(authSlice.actions.logout());
     } catch (e: any) {
       notify('Something went wrong .', 'error');
     }
