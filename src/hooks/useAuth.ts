@@ -4,8 +4,6 @@ import authSlice, {
   loginFailure,
   loginStart,
   loginSuccess,
-  setUser,
-  invalidToken,
 } from '../store/slices/auth.slice';
 
 import { loginType, signupType } from '../types/auth';
@@ -40,9 +38,6 @@ const useAuth = () => {
     try {
       const response: any = await AuthService.login(credentials);
       dispatch(loginSuccess(response.data));
-
-      // FETCH PROFILE
-      await fetchProfile();
        
       notify('Login successful.', 'success');
     } catch (e: any) {
@@ -66,18 +61,6 @@ const useAuth = () => {
     }
   };
 
-  /**
-   * FETCH PROFILE METHOD
-   * */
-  const fetchProfile = async () => {
-    try {
-      const response = await AuthService.fetchProfile();
-      dispatch(setUser(response));
-    } catch (e: any) {
-      console.error(e);
-      dispatch(invalidToken());
-    }
-  };
 
   return {
     user,
@@ -88,7 +71,6 @@ const useAuth = () => {
     register,
     login,
     logout,
-    fetchProfile,
   };
 };
 

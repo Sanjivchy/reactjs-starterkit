@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { clearToken, getToken, setToken } from '../../utils/helpers/token.utils'
 import { RolesType } from '../../types/auth';
 import AuthService from '../../services/auth.service';
 
@@ -12,7 +11,6 @@ interface UserTypes {
 }
 
 interface AuthTypes {
-  token: string;
   authenticated: boolean;
   authenticating: boolean;
   signing: boolean;
@@ -20,7 +18,6 @@ interface AuthTypes {
 }
 
 const initialState: AuthTypes = {
-  token: getToken() || '',
   authenticated: false,
   authenticating: false,
   signing: false,
@@ -53,12 +50,9 @@ const authSlice = createSlice({
       state.signing = false;
     },
 
-    loginSuccess(state, action) {
-      const { token } = action.payload;
+    loginSuccess(state) {
       state.authenticated = true;
       state.authenticating = false;
-      state.token = token;
-      setToken(token);
     },
 
     loginFailure(state) {
@@ -71,8 +65,6 @@ const authSlice = createSlice({
 
     logout(state) {
       state.authenticated = false;
-      state.token = '';
-      clearToken();
     },
 
     setUser(state, action) {
@@ -81,7 +73,6 @@ const authSlice = createSlice({
     },
 
     invalidToken(state) {
-      state.token = '';
       state.authenticating = false;
       state.authenticated = false;
     },

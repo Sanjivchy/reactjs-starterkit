@@ -2,6 +2,8 @@ import { loginType, signupType } from '../types/auth';
 import http from '../utils/http/http.utils';
 
 class AuthService {
+  private accessToken: string | null = null;
+
   /**
    * FETCH PROFILE
    * */
@@ -30,9 +32,37 @@ class AuthService {
   /**
    * LOGOUT METHOD
    * */
-  static logout(): Promise<void> {
+  async logout(): Promise<void> {
+    this.accessToken = null;
     return http().post('api/logout');
   }
+
+  /**
+   *  REFRESH ACCESS TOKEN METHOD 
+   **/
+  refreshAccessToken = async (): Promise<string> => {
+    const response = await fetch('auth/refresh', {
+      method: 'POST',
+      credentials: 'include', // This is important to include cookies in the request
+    });
+
+    if (response.ok) {
+      const { token } = await response.json();
+      this.accessToken = token;
+      return token;
+    } else {
+      throw new Error('Failed to refresh token');
+    }
+  };
+
+  /**
+   *  GET ACCESS TOKEN METHOD 
+   **/
+  getAccessToken = (): string | null => {
+    return this.accessToken;
+  };
+
 }
 
+export const authService = new AuthService();
 export default AuthService;
