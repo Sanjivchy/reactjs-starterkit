@@ -8,3 +8,8 @@ export const AUTH_GUARDS: PermissionTypes<RolesType> = {
   moderator: [ADMIN_HOME_PAGE,'/users'],
   user: [ADMIN_HOME_PAGE,'/products'],
 };
+
+export const TOKEN_KEY = {
+  TOKEN: 'TOKEN_KEY',
+  REFRESH_TOKEN: 'REFRESH_TOKEN_KEY'
+}

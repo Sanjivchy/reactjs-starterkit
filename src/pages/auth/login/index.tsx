@@ -14,7 +14,11 @@ const Login = () => {
   } = useForm<SignInSchemaType>({ resolver: zodResolver(SignInSchema) });
 
   const onSubmit: SubmitHandler<SignInSchemaType> = async(data) => {
-    await login(data);
+    const newData = {
+      ...data,
+      expiresInMins:1
+    }
+    await login(newData);
   }
 
   return (

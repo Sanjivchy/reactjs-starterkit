@@ -1,12 +1,13 @@
 import axios from 'axios';
-import { getToken } from '../helpers/token.utils';
+import { getToken, getRefreshToken, setToken, setRefreshToken } from '../helpers/token.utils';
+import AuthService from '../../services/auth.service';
 
 type HttpTypes = {
   additionalHeader?: { 'Content-Type'?: string };
 };
 
 const http = (config?: HttpTypes) => {
-  const baseURL = "http://localhost:5000/api/v1";
+  const baseURL = "https://dummyjson.com";
   /*
    * axios config
    * */
@@ -17,6 +18,8 @@ const http = (config?: HttpTypes) => {
       ...config?.additionalHeader,
     },
   };
+
+
 
   const instance = axios.create(axiosConfig);
 
@@ -30,6 +33,35 @@ const http = (config?: HttpTypes) => {
     }
     return config;
   });
+
+  /*
+   * intercepting response
+   */
+  instance.interceptors.response.use(
+    (response) => response,
+    async(error) => {
+      const originalRequest = error.config;
+      if(error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        try {
+          const newAccessToken = await AuthService.refreshAccessToken({
+            refreshToken: getRefreshToken(),
+            expiresInMins: 1
+          })
+          const { token, refreshToken } = newAccessToken.data;
+          setToken(token);
+          setRefreshToken(refreshToken);
+          instance.defaults.headers.Authorization = `Bearer ${token}`;
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          return instance(originalRequest);
+        }catch(error) {
+          return Promise.reject(error);
+        }
+      }
+      return Promise.reject(error);
+    }
+  )
+
 
   return instance;
 };

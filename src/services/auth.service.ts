@@ -1,4 +1,4 @@
-import { loginType, signupType } from '../types/auth';
+import { loginType, signupType, refreshTokenType } from '../types/auth';
 import http from '../utils/http/http.utils';
 
 class AuthService {
@@ -30,8 +30,13 @@ class AuthService {
   /**
    * LOGOUT METHOD
    * */
-  static logout(): Promise<void> {
+  static async logout(): Promise<void> {
     return http().post('api/logout');
+  }
+
+  static async refreshAccessToken(credentials:refreshTokenType) {
+    const response = await http().post('auth/refresh',JSON.stringify(credentials))
+    return response;
   }
 }
 
